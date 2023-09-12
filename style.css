@@ -33,15 +33,14 @@
   --fs-nav: var(--fs-regular);
   --fs-button: var(--fs-xs);
 
-
   /* spacing  */
-  --sm: '.5rem';
-  --md: '.75rem';
-  --lg: '1rem';
-  --xl: '1.5rem';
-  --2xl: '2rem';
-  --3xl: '3rem';
-  --4xl: '4rem';
+  --sm: 0.5rem;
+  --md: 0.75rem;
+  --lg: 1rem;
+  --xl: 1.5rem;
+  --2xl: 2rem;
+  --3xl: 3rem;
+  --4xl: 4rem;
 }
 
 @media (width >= 50em) {
@@ -193,9 +192,78 @@ select {
 
 .fs-primary-heading {
   font-size: var(--fs-primary-heading);
+  line-height: 1.1;
 }
 .fs-secondary-heading {
   font-size: var(--fs-secondary-heading);
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.no-opacity {
+  opacity: 1;
+}
+
+.full {
+  width: 100%;
+}
+
+.max-full {
+  max-width: 100%;
+}
+
+.overlay::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
+}
+
+.shadow {
+  box-shadow: 0 1.125em 1em -1em var(--clr-neutral-900);
+}
+
+.shadow-accent-400 {
+  box-shadow: 0 1.125em 1em -1em var(--clr-accent-400);
+}
+.shadow-accent-700 {
+  box-shadow: 0 1.125em 1em -1em var(--clr-accent-700);
+}
+
+/* this is for adding space between element in a container instead of adding margin everywhere or even gap and flex, we can use flow classes */
+:where(.flow :not(:first-child)) {
+  margin-top: var(--flow-spacer, var(--2xl));
+}
+
+.flow-tight {
+  --flow-spacer: var(--lg);
+}
+
+.w-custom {
+  max-width: var(--custom-width, 100%);
 }
 
 .p-sm {
@@ -514,22 +582,6 @@ select {
   margin-block: auto;
 }
 
-.flex {
-  display: flex;
-}
-
-.shadow{
-  box-shadow: 0 1.125em 1em -1em var(--clr-neutral-900);
-}
-
-.shadow-accent-400{
-  box-shadow: 0 1.125em 1em -1em var(--clr-accent-400);
-}
-.shadow-accent-700{
-  box-shadow: 0 1.125em 1em -1em var(--clr-accent-700);
-}
-
-
 /* =========== general styling ================== */
 
 body {
@@ -542,7 +594,7 @@ body {
 .container {
   /* instead of using the padding directly and change on smaller screen, min function choose the lesser value separated by commas. so min(1110px, 100%) on screen bigger than 1110px eg 1200px the min would be 1110px if the screen becomes smaller like mobile then 100% would be small maybe 500px then the min would choose 100%   */
   --max-width: 1110px;
-  --padding: 2rem;
+  --padding: var(--3xl);
 
   width: min(var(--max-width), 100% - var(--padding));
   margin-inline: auto;
@@ -554,22 +606,147 @@ body {
   flex-wrap: wrap;
 }
 
-@media(width >= 50em) {
+@media (width >= 50em) {
   .even-columns > * {
     flex: 1;
     flex-wrap: nowrap;
+    justify-content: center;
   }
 }
 
 .button {
-  padding: 0.75em 2em;
+  padding: 1em 2.5em;
   border-radius: 10rem;
   font-weight: var(--fw-bold);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-button);
   border: none;
   cursor: pointer;
 }
 
 .button:hover {
   opacity: 0.6;
+}
+
+/* not class means all the p that are not modified this would be the default look */
+/* p:not([class]) */
+p {
+  opacity: 0.6;
+  max-width: 32ch;
+  font-weight: var(--fw-regular);
+}
+
+
+/* =========== navigation styling ================== */
+
+.header {
+  padding-block: var(--2xl);
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-list {
+  display: flex;
+  gap: var(--2xl);
+}
+
+.primary-navigation a {
+  text-decoration: none;
+  color: var(--clr-primary-400);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-xs);
+}
+
+/* .mobile-nav-toggle .nav-icon-close {
+  display: none;
+} */
+
+@media (width <= 50em) {
+  .header .container {
+    justify-content: space-between;
+  }
+
+  .mobile-nav-toggle {
+    display: block;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+  }
+
+  .primary-navigation {
+    display: none;
+    inset: calc(var(--3xl) * 2) var(--xl) auto;
+    padding-block: var(--3xl);
+    border-radius: var(--sm);
+    background-color: var(--clr-neutral-100);
+    box-shadow: 0 0 1.2em 0.2em rgba(0, 0, 0, 0.1);
+  }
+
+  .header button:last-of-type {
+    display: none;
+  }
+
+  nav[data-visible] {
+    position: absolute;
+    display: block;
+  }
+
+  .primary-navigation ul {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--xl);
+  }
+
+  .primary-navigation a {
+    font-weight: var(--fw-semi-bold);
+    font-size: var(--fs-nav);
+  }
+}
+
+/* =========== lower section ================== */
+.lower-section {
+  position: relative;
+  isolation: isolate;
+}
+
+.lower-section::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: url("images/bg-tablet-pattern.svg"),
+    url("images/bg-tablet-pattern.svg");
+  background-position: 10rem -2rem, 75rem -22rem;
+  background-repeat: no-repeat;
+  background-size: 30rem;
+  opacity: 0.1;
+}
+
+@media (width <= 50em) {
+  .lower-section::after {
+    background-position: -20rem 2rem;
+    background-size: 25rem;
+  }
+}
+
+
+
+
+/* ===========  mobile general styling ================== */
+
+@media (width <= 50em) {
+  .md-flex-column {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    flex: 1;
+    gap: var(--gap-size, var(--lg))
+  }
+
+  p {
+    text-align: center;
+  }
 }
